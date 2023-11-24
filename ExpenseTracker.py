@@ -17,42 +17,46 @@ class ExpenseTracker:
         # UI Elements
         self.setup_ui()
 
+
     def setup_ui(self):
 
+        # Set the font
+        font_settings = ('Josefin Sans', 12)
+
         style = ttk.Style(self.root)
-        style.configure("BudgetAdjustment.Treeview", foreground="green")
-        style.configure("NegativeExpense.Treeview", foreground="red")
+        style.configure("BudgetAdjustment.Treeview", foreground="green", font=font_settings)
+        style.configure("NegativeExpense.Treeview", foreground="red", font=font_settings)
 
         # Monthly Budget
-        tk.Label(self.root, text="Monthly Budget:").grid(row=0, column=0)
+        tk.Label(self.root, text="Monthly Budget:", font=font_settings).grid(row=0, column=0)
         self.budget_entry = tk.Entry(self.root)
         self.budget_entry.grid(row=0, column=1)
         self.budget_entry.insert(0, str(self.budget))
 
         # Expense Name
-        tk.Label(self.root, text="Expense Name:").grid(row=1, column=0)
+        tk.Label(self.root, text="Expense Name:", font=font_settings).grid(row=1, column=0)
         self.expense_name_entry = tk.Entry(self.root)
         self.expense_name_entry.grid(row=1, column=1)
 
         # Expense Amount
-        tk.Label(self.root, text="Amount:").grid(row=2, column=0)
+        tk.Label(self.root, text="Amount:", font=font_settings).grid(row=2, column=0)
         self.expense_amount_entry = tk.Entry(self.root)
         self.expense_amount_entry.grid(row=2, column=1)
 
         # Frequency
-        tk.Label(self.root, text="Frequency:").grid(row=3, column=0)
+        tk.Label(self.root, text="Frequency:", font=font_settings).grid(row=3, column=0)
         self.frequency_var = tk.StringVar(value="Monthly")
         tk.OptionMenu(self.root, self.frequency_var, "Daily", "Weekly", "Monthly", "One Time").grid(row=3, column=1)
 
         # Buttons
-        tk.Button(self.root, text="Set Budget", command=self.set_budget).grid(row=4, column=0)
-        tk.Button(self.root, text="Reset Budget", command=self.reset_budget).grid(row=5, column=0)
-        tk.Button(self.root, text="Add Expense", command=self.add_expense).grid(row=4, column=1)
-        tk.Button(self.root, text="Save State", command=self.save_data).grid(row=6, column=0)
-        tk.Button(self.root, text="Show Expenses", command=self.show_expenses).grid(row=5, column=1)
+        tk.Button(self.root, text="Set Budget", command=self.set_budget, font=font_settings).grid(row=4, column=0)
+        tk.Button(self.root, text="Reset Budget", command=self.reset_budget, font=font_settings).grid(row=5, column=0)
+        tk.Button(self.root, text="Add Expense", command=self.add_expense, font=font_settings).grid(row=4, column=1)
+        tk.Button(self.root, text="Save State", command=self.save_data, font=font_settings).grid(row=6, column=0)
+        tk.Button(self.root, text="Show Expenses", command=self.show_expenses, font=font_settings).grid(row=5, column=1)
 
         # Remaining Budget
-        self.remaining_label = tk.Label(self.root, text="")
+        self.remaining_label = tk.Label(self.root, text="", font=font_settings)
         self.remaining_label.grid(row=7, column=0, columnspan=2)
         self.update_remaining_budget()
 
