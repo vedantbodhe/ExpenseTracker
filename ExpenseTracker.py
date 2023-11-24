@@ -58,24 +58,37 @@ class ExpenseTracker:
             messagebox.showerror("Error", "Invalid budget value")
 
     def add_expense(self):
+        expense_name = self.expense_name_entry.get()
+        expense_amount_entry = self.expense_amount_entry.get()
+        frequency = self.frequency_var.get()
+
+        # Check if the expense name is empty
+        if not expense_name.strip():
+            messagebox.showerror("Error", "Please enter an expense name")
+            return
+
+        # Validate and convert the expense amount
         try:
-            expense_name = self.expense_name_entry.get()
-            expense_amount = float(self.expense_amount_entry.get())
-            frequency = self.frequency_var.get()
-
-            self.expenses.append({
-                "name": expense_name,
-                "amount": expense_amount,
-                "frequency": frequency
-            })
-
-            if frequency != "One Time":
-                self.budget -= expense_amount
-
-            self.update_remaining_budget()
-            self.save_data()
+            expense_amount = float(expense_amount_entry)
+            if expense_amount <= 0:
+                raise ValueError("Amount must be positive")
         except ValueError:
-            messagebox.showerror("Error", "Invalid amount")
+            messagebox.showerror("Error", "Invalid amount. Please enter a valid number.")
+            return
+
+        # Add the expense and update the budget
+        self.expenses.append({
+            "name": expense_name,
+            "amount": expense_amount,
+            "frequency": frequency
+        })
+
+        # Deduct the expense amount from the budget for 'One Time' expenses
+        if frequency == "One Time":
+            self.budget -= expense_amount
+
+        self.update_remaining_budget()
+        self.save_data()
 
     def update_remaining_budget(self):
         self.remaining_label.config(text=f"Remaining Budget: {self.budget}")
