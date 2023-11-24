@@ -18,6 +18,11 @@ class ExpenseTracker:
         self.setup_ui()
 
     def setup_ui(self):
+
+        style = ttk.Style(self.root)
+        style.configure("BudgetAdjustment.Treeview", foreground="green")
+        style.configure("NegativeExpense.Treeview", foreground="red")
+
         # Monthly Budget
         tk.Label(self.root, text="Monthly Budget:").grid(row=0, column=0)
         self.budget_entry = tk.Entry(self.root)
@@ -140,7 +145,18 @@ class ExpenseTracker:
         tree.heading("Frequency", text="Frequency")
 
         for expense in self.expenses:
-            tree.insert('', tk.END, values=(expense["name"], expense["amount"], expense["frequency"]))
+            if expense["name"] == "Budget Adjustment":
+                # Use the BudgetAdjustment style for budget adjustments
+                tree.insert('', tk.END, values=(expense["name"], expense["amount"], expense["frequency"]),
+                            tags=("budget_adjustment",))
+            else:
+                # Use the NegativeExpense style for negative expenses (deductions)
+                color = "negative_expense" if expense["amount"] else ""
+                tree.insert('', tk.END, values=(expense["name"], expense["amount"], expense["frequency"]),
+                            tags=(color,))
+
+        tree.tag_configure("budget_adjustment", foreground="green")
+        tree.tag_configure("negative_expense", foreground="red")
 
         tree.pack(expand=True, fill='both')
 
