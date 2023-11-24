@@ -1,6 +1,10 @@
+import csv
 import tkinter as tk
 from tkinter import messagebox, Toplevel, ttk
 import json
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
 class ExpenseTracker:
@@ -54,10 +58,18 @@ class ExpenseTracker:
         tk.Button(self.root, text="Add Expense", command=self.add_expense, font=font_settings).grid(row=4, column=1)
         tk.Button(self.root, text="Save State", command=self.save_data, font=font_settings).grid(row=6, column=0)
         tk.Button(self.root, text="Show Expenses", command=self.show_expenses, font=font_settings).grid(row=5, column=1)
+        # Button to export data to CSV
+        tk.Button(self.root, text="Export to CSV", command=self.export_to_csv, font=font_settings).grid(row=6,
+                                                                                                        column=1
+                                                                                                        )
+        # Button to show chart
+        tk.Button(self.root, text="Show Chart", command=self.show_chart, font=font_settings).grid(row=8,
+                                                                                                         column=0
+                                                                                                        )
 
         # Remaining Budget
         self.remaining_label = tk.Label(self.root, text="", font=font_settings)
-        self.remaining_label.grid(row=7, column=0, columnspan=2)
+        self.remaining_label.grid(row=9, column=0, columnspan=2)
         self.update_remaining_budget()
 
         # Configure row and column weights for scalability
@@ -69,6 +81,8 @@ class ExpenseTracker:
         self.root.grid_rowconfigure(5, weight=1)
         self.root.grid_rowconfigure(6, weight=1)
         self.root.grid_rowconfigure(7, weight=1)
+        self.root.grid_rowconfigure(8, weight=1)
+        self.root.grid_rowconfigure(9, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
 
@@ -182,6 +196,42 @@ class ExpenseTracker:
         except (FileNotFoundError, json.JSONDecodeError):
             self.budget = 0.0
             self.expenses = []
+
+    def export_to_csv(self):
+        with open('expenses.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Name', 'Amount', 'Frequency'])
+            for expense in self.expenses:
+                writer.writerow([expense['name'], expense['amount'], expense['frequency']])
+        messagebox.showinfo("Exported", "Expenses exported to expenses.csv")
+
+    def show_chart(self):
+        labels = []
+        sizes = []
+
+        for expense in self.expenses:
+            if expense['amount'] >= 0:
+                labels.append(expense['name'])
+                sizes.append(expense['amount'])
+
+        if sizes:
+            # Create a figure for the plot
+            fig = Figure(figsize=(6, 6))
+            ax = fig.add_subplot(111)
+
+            # Create the pie chart
+            ax.pie(sizes, labels=labels, autopct='%1.1f%%')
+            ax.axis('equal')  # Equal aspect ratio ensures the pie chart is circular.
+
+            # Embed the figure in the Tkinter window
+            chart_window = Toplevel(self.root)
+            chart_window.title("Expense Chart")
+            canvas = FigureCanvasTkAgg(fig, master=chart_window)
+            canvas_widget = canvas.get_tk_widget()
+            canvas_widget.pack(fill=tk.BOTH, expand=True)
+            canvas.draw()
+        else:
+            messagebox.showinfo("No Data", "No non-negative expense data to display.")
 
 
 if __name__ == "__main__":
