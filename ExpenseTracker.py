@@ -50,6 +50,23 @@ class ExpenseTracker:
         self.remaining_label.grid(row=6, column=0, columnspan=2)
         self.update_remaining_budget()
 
+        # Configure row and column weights for scalability
+        self.root.grid_rowconfigure(0, weight=1)
+        self.root.grid_rowconfigure(1, weight=1)
+        self.root.grid_rowconfigure(2, weight=1)
+        self.root.grid_rowconfigure(3, weight=1)
+        self.root.grid_rowconfigure(4, weight=1)
+        self.root.grid_rowconfigure(5, weight=1)
+        self.root.grid_rowconfigure(6, weight=1)
+        self.root.grid_columnconfigure(0, weight=1)
+        self.root.grid_columnconfigure(1, weight=1)
+
+        # Adjust widgets to fill the grid cell
+        self.budget_entry.grid(sticky="ew")
+        self.expense_name_entry.grid(sticky="ew")
+        self.expense_amount_entry.grid(sticky="ew")
+        self.remaining_label.grid(sticky="ew")
+
     def set_budget(self):
         try:
             self.budget = float(self.budget_entry.get())
