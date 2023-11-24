@@ -41,13 +41,14 @@ class ExpenseTracker:
 
         # Buttons
         tk.Button(self.root, text="Set Budget", command=self.set_budget).grid(row=4, column=0)
+        tk.Button(self.root, text="Reset Budget", command=self.reset_budget).grid(row=5, column=0)
         tk.Button(self.root, text="Add Expense", command=self.add_expense).grid(row=4, column=1)
-        tk.Button(self.root, text="Save State", command=self.save_data).grid(row=5, column=0)
+        tk.Button(self.root, text="Save State", command=self.save_data).grid(row=6, column=0)
         tk.Button(self.root, text="Show Expenses", command=self.show_expenses).grid(row=5, column=1)
 
         # Remaining Budget
         self.remaining_label = tk.Label(self.root, text="")
-        self.remaining_label.grid(row=6, column=0, columnspan=2)
+        self.remaining_label.grid(row=7, column=0, columnspan=2)
         self.update_remaining_budget()
 
         # Configure row and column weights for scalability
@@ -58,6 +59,7 @@ class ExpenseTracker:
         self.root.grid_rowconfigure(4, weight=1)
         self.root.grid_rowconfigure(5, weight=1)
         self.root.grid_rowconfigure(6, weight=1)
+        self.root.grid_rowconfigure(7, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
 
@@ -71,6 +73,24 @@ class ExpenseTracker:
         try:
             self.budget = float(self.budget_entry.get())
             self.update_remaining_budget()
+        except ValueError:
+            messagebox.showerror("Error", "Invalid budget value")
+
+    def reset_budget(self):
+        try:
+            new_budget = float(self.budget_entry.get())
+            budget_change = new_budget - self.budget
+            self.budget = new_budget
+
+            # Record the budget change as a special expense entry
+            self.expenses.append({
+                "name": "Budget Adjustment",
+                "amount": budget_change,
+                "frequency": "Adjustment"
+            })
+
+            self.update_remaining_budget()
+            self.save_data()
         except ValueError:
             messagebox.showerror("Error", "Invalid budget value")
 

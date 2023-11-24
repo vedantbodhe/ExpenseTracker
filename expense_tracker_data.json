@@ -1,1 +1,1 @@
-{"budget": 117.0, "expenses": [{"name": "fruits", "amount": 5.0, "frequency": "One Time"}, {"name": "hotwheels", "amount": 12.0, "frequency": "One Time"}]}
+{"budget": 450.0, "expenses": [{"name": "fruits", "amount": 5.0, "frequency": "One Time"}, {"name": "hotwheels", "amount": 12.0, "frequency": "One Time"}, {"name": "Budget Adjustment", "amount": 133.0, "frequency": "Adjustment"}, {"name": "Budget Adjustment", "amount": -700.0, "frequency": "Adjustment"}, {"name": "Budget Adjustment", "amount": 900.0, "frequency": "Adjustment"}]}
