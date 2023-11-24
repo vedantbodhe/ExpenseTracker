@@ -12,7 +12,7 @@ class ExpenseTracker:
         self.load_data()
 
         # Other variables
-        self.expenses = []
+        #self.expenses = []
 
         # UI Elements
         self.setup_ui()
@@ -138,6 +138,7 @@ class ExpenseTracker:
                 data = json.load(file)
                 self.budget = data.get("budget", 0.0)
                 self.expenses = data.get("expenses", [])
+                print(self.expenses)
         except (FileNotFoundError, json.JSONDecodeError):
             self.budget = 0.0
             self.expenses = []
